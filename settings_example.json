@@ -1,0 +1,21 @@
+{
+	"home_dir": "C:\home\projects",
+	"share_dir": "C:\Users\uzer\Dropbox\AppFilesStorage",
+	"current_app": "VBADevTools.xlam",
+	"apps": [
+		{
+			"app_name": "VBADevTools",
+			"file_ext": ".xlam",
+			"import_code": false,
+			"enable_events": true,
+			"password": null
+		},
+		{
+			"app_name": "SomeApp",
+			"file_ext": ".xlsm",
+			"import_code": false,
+			"enable_events": true,
+			"password": null
+		}
+	]
+}
