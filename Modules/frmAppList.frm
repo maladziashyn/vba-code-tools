@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} frmAppList 
-   Caption         =   "UserForm1"
-   ClientHeight    =   5055
+   Caption         =   "Manage Applications"
+   ClientHeight    =   4845
    ClientLeft      =   45
    ClientTop       =   390
-   ClientWidth     =   10440
+   ClientWidth     =   8040
    OleObjectBlob   =   "frmAppList.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -15,12 +15,63 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Private Sub bt_Cancel_Click()
+Private Sub bt_BrowseBackupDir_Click()
+    tb_BackupDir.Text = PathFromPicker
+End Sub
+
+Private Sub bt_BrowseHomeDir_Click()
+    tb_HomeDir.Text = PathFromPicker
+End Sub
+
+Private Function PathFromPicker() As String
+' Update text box taking value from folder picker.
+
+    Dim fd As FileDialog
+    
+    Set fd = Application.FileDialog(msoFileDialogFolderPicker)
+    With fd
+        .AllowMultiSelect = False
+'        .Title = "Pick projects home directory"
+    End With
+    If fd.Show = 0 Then
+        Exit Function
+    Else
+        PathFromPicker = fd.SelectedItems(1)
+    End If
+    
+End Function
+
+Private Sub bt_Close_Click()
     Unload Me
 End Sub
 
 Private Sub bt_OK_Click()
     Unload Me
+End Sub
+
+Private Sub bt_SaveChanges_Click()
+    
+    Dim i As Long
+    Dim LastR As Long
+    Dim Arr As Variant
+    
+    If Not IsEmpty(ws1.Range("AppList").Offset(1, 0)) Then
+        LastR = ws1.Cells(ws1.Rows.Count, 1).End(xlUp).Row
+        ReDim Arr(1 To LastR - 1, 1 To 2)
+        For i = 2 To LastR
+            Arr(i - 1, 1) = ws1.Cells(i, 1)
+            Arr(i - 1, 2) = ws1.Cells(i, 2)
+        Next i
+    End If
+    
+    With oAppData
+        .HomeDir = tb_HomeDir.Text
+        .BackupDir = tb_BackupDir.Text
+        .PrintArr = Arr
+    End With
+    
+    Call oAppData.SaveChangesToJson
+    
 End Sub
 
 Private Sub UserForm_Initialize()

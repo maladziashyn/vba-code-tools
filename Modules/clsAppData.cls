@@ -53,12 +53,53 @@ Private Sub Class_Initialize()
     
 End Sub
 
+Public Sub SaveChangesToJson()
+    
+    Dim i As Long
+    Dim ArrApps As Variant
+    
+    With this
+        .Json("home_dir") = .HomeDir
+        .Json("backup_dir") = .BackupDir
+        ReDim ArrApps(1 To UBound(.PrintArr, 1))
+        For i = LBound(.PrintArr, 1) To UBound(.PrintArr, 1)
+            Set ArrApps(i) = AppDict(.PrintArr(i, 1), .PrintArr(i, 2))
+        Next i
+        .Json("apps") = ArrApps
+        Call SaveStringToFile( _
+            JsonConverter.ConvertToJson(this.Json, Whitespace:=4), _
+            .FPath _
+        )
+    End With
+    
+End Sub
+
+Private Function AppDict(ByVal AppName As String, _
+        ByVal AppExt As String) As Dictionary
+    
+    Dim NewD As New Dictionary
+    With NewD
+        .Add "name", AppName
+        .Add "ext", AppExt
+    End With
+    Set AppDict = NewD
+End Function
+
 Public Property Get HomeDir() As String
     HomeDir = this.HomeDir
+End Property
+Public Property Let HomeDir(ByVal NewVal As String)
+    this.HomeDir = NewVal
 End Property
 Public Property Get BackupDir() As String
     BackupDir = this.BackupDir
 End Property
+Public Property Let BackupDir(ByVal NewVal As String)
+    this.BackupDir = NewVal
+End Property
 Public Property Get PrintArr() As Variant
     PrintArr = this.PrintArr
+End Property
+Public Property Let PrintArr(ByVal NewVal As Variant)
+    this.PrintArr = NewVal
 End Property

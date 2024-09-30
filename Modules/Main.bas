@@ -67,3 +67,31 @@ Private Function SetRangeFromArrDimensions(ByRef Ws As Worksheet, _
     
 End Function
 
+Sub SaveStringToFile(ByVal PrintText As String, _
+        ByVal FPath As String, _
+        Optional ByVal ToOpen As Boolean = False)
+    
+    Dim FNum As Integer
+    
+    FNum = FreeFile
+    Open FPath For Output As FNum ' alternatively - For Append
+    Print #FNum, PrintText
+    Close #FNum
+    
+    If ToOpen Then
+        Shell """C:\Program Files\Notepad++\notepad++.exe"" """ & FPath & """", vbNormalFocus
+    End If
+
+End Sub
+
+Function ReadFileToString(ByVal FPath As String) As String
+    
+    Dim FNum As Integer
+    
+    FNum = FreeFile
+    Open FPath For Input As FNum
+    ReadFileToString = input(LOF(FNum), FNum)
+    Close FNum
+    
+End Function
+

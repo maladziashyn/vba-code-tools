@@ -1,14 +1,14 @@
-Attribute VB_Name = "mdlRibbon"
+Attribute VB_Name = "Ribbon"
 Option Explicit
 
 Public Const MsbTitle As String = "VBA Code Tools"
 
 Public rbxUI_VCT As IRibbonUI
 
-Sub VBACodeTools_onLoad(ByRef ribbon As IRibbonUI)
+Sub VBACodeTools_onLoad(ByRef Ribbon As IRibbonUI)
 ' Load the custom ribbon tab.
 
-    Set rbxUI_VCT = ribbon
+    Set rbxUI_VCT = Ribbon
 '    rbxUI_VCT.ActivateTab "tabVBACodeTools" ' for 2010 and newer
     Application.WindowState = xlMaximized
     
@@ -17,7 +17,9 @@ End Sub
 Sub VBACodeTools_ClickButton(ByRef control As IRibbonControl)
 
     Select Case control.ID
-
+        Case "btExit"
+            ThisWorkbook.Close savechanges:=False
+        
     End Select
     
 End Sub
