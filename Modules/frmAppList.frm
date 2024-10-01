@@ -98,7 +98,7 @@ End Sub
 
 Private Function ListboxColumnWidths(ByRef DataRg As Range) As String
 ' Return string of column widths.
-' Columns may loop a bit wider than needed, but still a good option.
+' Columns may look a bit wider than needed, but still a good option.
     
     Dim i As Long
     Dim ColWd As Long

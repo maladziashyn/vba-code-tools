@@ -89,7 +89,7 @@ Function ReadFileToString(ByVal FPath As String) As String
     Dim FNum As Integer
     
     FNum = FreeFile
-    Open FPath For Input As FNum
+    Open FPath For Input As #FNum
     ReadFileToString = input(LOF(FNum), FNum)
     Close FNum
     

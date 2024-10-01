@@ -23,7 +23,7 @@ Private this As TAppData
 
 Private Sub Class_Initialize()
     
-    Dim i As Long
+    Dim i As Long, j As Long
     Dim Itm As Variant
     
     With this
@@ -45,8 +45,10 @@ Private Sub Class_Initialize()
         ' Fill rows
         i = 1
         For Each Itm In .Json("apps")
-            .PrintArr(i, 1) = Itm("name")
-            .PrintArr(i, 2) = Itm("ext")
+            For j = 1 To .Json("headers").Count
+                .PrintArr(i, j) = Itm(.Json("headers")(j))
+'                .PrintArr(i, j) = Itm("ext")
+            Next j
             i = i + 1
         Next Itm
     End With
