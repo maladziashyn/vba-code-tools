@@ -17,8 +17,11 @@ End Sub
 Sub VBACodeTools_ClickButton(ByRef control As IRibbonControl)
 
     Select Case control.ID
+        Case "btSelectApp"
+            frmSelectApp.Show
+
         Case "btExit"
-            ThisWorkbook.Close savechanges:=False
+            ThisWorkbook.Close SaveChanges:=False
         
     End Select
     
@@ -26,6 +29,19 @@ End Sub
 
 Sub VBACodeTools_ClickButton_WithGetPressed(ByRef control As IRibbonControl, _
         ByRef pressed As Boolean)
+' Turn AddIn mode on/off.
+' Turn it off to make change on add-in's worksheets.
+    
+    With ThisWorkbook
+        If .IsAddin Then
+            .IsAddin = False
+        Else
+            .IsAddin = True
+'            .Save
+        End If
+        pressed = .IsAddin
+'        IsEnabledButton = .IsAddin
+    End With
 
     ' Refresh ribbon
     If rbxUI_VCT Is Nothing Then
@@ -39,7 +55,10 @@ End Sub
 
 Sub VBACodeTools_GetPressed(ByRef control As IRibbonControl, ByRef returnedVal)
     
-    returnedVal = True
+    Select Case control.Tag
+        Case "AddInMode"
+            returnedVal = ThisWorkbook.IsAddin
+    End Select
         
 End Sub
 
@@ -57,6 +76,11 @@ End Sub
 
 Sub VBACodeTools_GetLabel(ByRef control As IRibbonControl, ByRef returnedVal)
     
-    returnedVal = "Unknown..."
+    Select Case control.ID
+        Case "btSelectApp"
+            returnedVal = ws1.Range("CurrentApp").Value
+        Case Else
+            returnedVal = "Unknown..."
+    End Select
     
 End Sub
