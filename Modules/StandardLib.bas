@@ -41,3 +41,14 @@ Function IsWbOpen(ByVal WbName As String) As Boolean
     End If
 
 End Function
+
+Sub AddWorkbookVBA6()
+    
+    #If VBA6 Then
+        If Workbooks.Count = 1 Then
+            Workbooks.Add
+        End If
+    #End If
+    
+End Sub
+

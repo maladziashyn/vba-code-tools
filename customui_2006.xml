@@ -1,0 +1,127 @@
+<customUI xmlns="http://schemas.microsoft.com/office/2006/01/customui" onLoad="VBACodeTools_onLoad">
+	<ribbon startFromScratch="false">
+		<tabs>
+			<tab id="tabVBACodeTools" label="VBA Code Tools">
+				
+				<group id="grpApp" label="Work with App" imageMso="FileOpen">
+                    
+                    <button id="btSelectApp" 
+                        getLabel="VBACodeTools_GetLabel" 
+                        imageMso="ChooseForm"
+                        screentip="Select app"
+                        supertip="Select application to build or deploy." 
+                        size="large"
+                        getEnabled="VBACodeTools_GetEnabled"
+                        onAction="VBACodeTools_ClickButton"/>
+                    
+                    <splitButton
+                        id="splbtnCodeExport"
+                        tag="gpCode"
+                        size="large"
+                        getEnabled="VBACodeTools_GetEnabled">
+                        <button id="btnExportCode"
+                            label="Export"
+                            screentip="Export code"
+                            supertip="Export code to CODE DIR. Choose to export without or with user forms."
+                            imageMso="ExportTextFile"
+                            onAction="VBACodeTools_ClickButton"/>
+                        <menu id="menuExport">
+                            <button id="itemExportExclForms"
+                                label="Excluding forms"
+                                imageMso="DeclineInvitation"
+                                onAction="VBACodeTools_ClickButton"/>
+                            <button id="itemExportInclForms"
+                                label="Including forms"
+                                imageMso="ViewsFormView"
+                                onAction="VBACodeTools_ClickButton"/>
+                            
+                            <menuSeparator id="splbtnCodeExport_sep_01"/>
+                            
+                            <button id="itemDumpToVB"
+                                imageMso="TextFromFileInsert" 
+                                label="Dump as text to .vb"
+                                screentip="Dump code"
+                                supertip="Dump all code to single .vb file as text."
+                                onAction="VBACodeTools_ClickButton"/>
+                        </menu>
+                    </splitButton>
+                    
+				</group>
+				
+				<group id="gpTools" label="Misc Tools" imageMso="WatchWindow">
+					<button id="btMain" 
+                        label="Main" 
+                        imageMso="HappyFace"
+                        size="large" 
+                        getEnabled="VBACodeTools_GetEnabled"
+                        onAction="VBACodeTools_ClickButton"/>
+					<button id="btChRefStyle" 
+                        label="Ref Style" 
+                        imageMso="WatchWindow"
+                        size="large" 
+                        getEnabled="VBACodeTools_GetEnabled"
+                        onAction="VBACodeTools_ClickButton"/>
+					<button id="btCellInfo" 
+                        label="Cell Info" 
+                        imageMso="TableSelectCell"
+                        size="normal" 
+                        getEnabled="VBACodeTools_GetEnabled"
+                        onAction="VBACodeTools_ClickButton"/>
+                    <button id="btCopySheet" 
+                        label="Copy sheet" 
+                        imageMso="Copy"
+                        size="normal" 
+                        getEnabled="VBACodeTools_GetEnabled"
+                        onAction="VBACodeTools_ClickButton"/>
+                    <button id="btnDelSheet" 
+                        label="Delete sheet" 
+                        imageMso="SheetDelete"
+                        size="normal" 
+                        getEnabled="VBACodeTools_GetEnabled"
+                        onAction="VBACodeTools_ClickButton"/>
+				</group>
+				
+				<group id="gpAddIn" label="AddIn" imageMso="PageMenu">
+                    
+                    <menu id="menuSettingsActions"
+                        label="Settings"
+                        imageMso="PageMenu"
+                        size="large"
+                        screentip="Settings Actions"
+                        supertip="Actions you can do with the settings: show, hide, export as JSON, import from JSON."
+                        itemSize="large">
+                        <button id="itmShowHideSettings"
+                            screentip="Show or Hide Settings"
+                            getLabel="VBACodeTools_GetLabel"
+                            onAction="VBACodeTools_ClickButton"/>
+                        <menuSeparator id="separator_01" />
+                        <button id="itmExportSettings"
+                            label="Export"
+                            imageMso="ExportTextFile"
+                            screentip="Export"
+                            supertip="Export settings to JSON."
+                            getEnabled="VBACodeTools_GetEnabled"
+                            onAction="VBACodeTools_ClickButton"/>
+                        <button id="itmImportSettings"
+                            label="Import"
+                            imageMso="ImportTextFile"
+                            screentip="Import"
+                            supertip="Import settings from JSON."
+                            getEnabled="VBACodeTools_GetEnabled"
+                            onAction="VBACodeTools_ClickButton"/>
+                    </menu>
+
+                    <button id="btExit" 
+                        label="Quit" 
+                        imageMso="MasterViewClose" 
+                        tag="IsAddIn"
+                        size="large" 
+                        getEnabled="VBACodeTools_GetEnabled"
+                        onAction="VBACodeTools_ClickButton"/>
+                    
+				</group>
+				
+			</tab>
+		</tabs>
+	</ribbon>
+</customUI>

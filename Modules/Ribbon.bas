@@ -9,7 +9,9 @@ Sub VBACodeTools_onLoad(ByRef Ribbon As IRibbonUI)
 ' Load the custom ribbon tab.
 
     Set rbxUI_VCT = Ribbon
-'    rbxUI_VCT.ActivateTab "tabVBACodeTools" ' for 2010 and newer
+    #If VBA7 Then ' for 2010 and newer
+        rbxUI_VCT.ActivateTab "tabVBACodeTools"
+    #End If
     Application.WindowState = xlMaximized
     
 End Sub
@@ -19,7 +21,8 @@ Sub VBACodeTools_ClickButton(ByRef control As IRibbonControl)
     Select Case control.ID
         Case "btSelectApp"
             frmSelectApp.Show
-
+        Case "itmShowHideSettings"
+            Call ShowHideSettings
         Case "btExit"
             ThisWorkbook.Close SaveChanges:=False
         
@@ -27,20 +30,20 @@ Sub VBACodeTools_ClickButton(ByRef control As IRibbonControl)
     
 End Sub
 
-Sub VBACodeTools_ClickButton_WithGetPressed(ByRef control As IRibbonControl, _
-        ByRef pressed As Boolean)
+'Sub VBACodeTools_ClickButton_WithGetPressed(ByRef control As IRibbonControl, _
+'        ByRef pressed As Boolean)
+'
+'    Call ShowHideSettings(pressed)
+'
+'End Sub
+
+Private Sub ShowHideSettings()
 ' Turn AddIn mode on/off.
 ' Turn it off to make change on add-in's worksheets.
     
     With ThisWorkbook
-        If .IsAddin Then
-            .IsAddin = False
-        Else
-            .IsAddin = True
-'            .Save
-        End If
-        pressed = .IsAddin
-'        IsEnabledButton = .IsAddin
+        Call AddWorkbookVBA6
+        .IsAddin = Not .IsAddin
     End With
 
     ' Refresh ribbon
@@ -50,27 +53,13 @@ Sub VBACodeTools_ClickButton_WithGetPressed(ByRef control As IRibbonControl, _
     Else
         rbxUI_VCT.Invalidate
     End If
-    
-End Sub
 
-Sub VBACodeTools_GetPressed(ByRef control As IRibbonControl, ByRef returnedVal)
-    
-    Select Case control.Tag
-        Case "AddInMode"
-            returnedVal = ThisWorkbook.IsAddin
-    End Select
-        
+
 End Sub
 
 Sub VBACodeTools_GetEnabled(ByRef control As IRibbonControl, ByRef returnedVal)
     
-    returnedVal = True
-    
-End Sub
-
-Sub VBACodeTools_GetVisible(ByRef control As IRibbonControl, ByRef returnedVal)
-    
-    returnedVal = True
+    returnedVal = Not ThisWorkbook.IsAddin
     
 End Sub
 
@@ -79,6 +68,8 @@ Sub VBACodeTools_GetLabel(ByRef control As IRibbonControl, ByRef returnedVal)
     Select Case control.ID
         Case "btSelectApp"
             returnedVal = ws1.Range("CurrentApp").Value
+        Case "itmShowHideSettings"
+            returnedVal = IIf(ThisWorkbook.IsAddin, "Hide Settings", "Show Settings")
         Case Else
             returnedVal = "Unknown..."
     End Select

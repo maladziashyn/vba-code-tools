@@ -49,3 +49,32 @@ Sub d003()
     Rg.TextToColumns Comma:=True
     
 End Sub
+
+Sub TestMyVBA()
+' https://learn.microsoft.com/en-us/office/vba/language/concepts/getting-started/compiler-constants
+    
+    #If VBA6 Then
+        Debug.Print "vba 6"
+    #Else
+        Debug.Print "not vba 6"
+    #End If
+    
+    #If VBA7 Then
+        Debug.Print "vba 7"
+    #Else
+        Debug.Print "not vba 7"
+    #End If
+    
+    #If Win64 Then
+        Debug.Print "win 64"
+    #Else
+        Debug.Print "not win 64"
+    #End If
+
+    #If Win32 Then
+        Debug.Print "win 32"
+    #Else
+        Debug.Print "not win 32"
+    #End If
+
+End Sub
