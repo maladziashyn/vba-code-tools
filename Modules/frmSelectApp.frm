@@ -17,7 +17,7 @@ Option Explicit
 
 Private Sub btnOK_Click()
     
-    ws1.Range("CurrentApp").Value = lbxApps.Value
+    ws1.Range(RgCurrApp).Value = lbxApps.Value
     Set oApp = New clsApp
     rbxUI_VCT.Invalidate
     Unload frmSelectApp
@@ -29,10 +29,10 @@ Private Sub UserForm_Initialize()
     frmSelectApp.Caption = MsbTitle
     With lbxApps
         .List = Application.WorksheetFunction.Transpose( _
-            ws1.ListObjects("tblApps") _
-                .ListColumns("Name") _
+            ws1.ListObjects(TblApps) _
+                .ListColumns(AppNmCol) _
                 .DataBodyRange)
-        .ListIndex = ws1.Range("frmListIndex").Value
+        .ListIndex = ws1.Range(RgFormListIndex).Value
     End With
     
 End Sub

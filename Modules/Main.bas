@@ -1,60 +1,81 @@
 Attribute VB_Name = "Main"
 Option Explicit
 
-Private Function SetRangeFromArrDimensions(ByRef Ws As Worksheet, _
-        ByRef UpLeftC As Range, _
-        ByVal Arr As Variant, _
-        Optional ByVal IsOneDim As Boolean = False) As Range
-' Set range with size like the passed in Arr.
-' 2-dim array should be dimensioned as Rows-Columns
+Sub ExportSettings()
     
-    Dim AddLBoundRows As Long
-    Dim AddLBoundCols As Long
+    Dim i As Long, j As Long
+    Dim OutJson As String
+    Dim TbRows As String
+    Dim Itm As Variant
     Dim Rg As Range
+    Dim OutD As New Dictionary
     
-    AddLBoundRows = IIf(LBound(Arr, 1) = 0, 1, 0)
-    If Not IsOneDim Then
-        AddLBoundCols = IIf(LBound(Arr, 2) = 0, 1, 0)
-    End If
+    Set Rg = ws1.ListObjects(TblApps).DataBodyRange
+    For i = 1 To Rg.Rows.Count
+        For j = 1 To Rg.Columns.Count
+            TbRows = TbRows & Rg(i, j) & JsonSep
+        Next j
+        TbRows = TbRows & vbLf
+    Next i
     
-    Set Rg = Ws.Cells
-    If Not IsOneDim Then
-        Set SetRangeFromArrDimensions = Ws.Range(UpLeftC, Rg( _
-            UpLeftC.Row + UBound(Arr, 1) - 1 + AddLBoundRows, _
-            UpLeftC.Column + UBound(Arr, 2) - 1 + AddLBoundCols))
-    Else
-        Set SetRangeFromArrDimensions = Ws.Range(UpLeftC, Rg( _
-            UpLeftC.Row + UBound(Arr) - 1 + AddLBoundRows, _
-            UpLeftC.Column))
-    End If
+    With OutD
+        .Add "TableRows", Left(TbRows, Len(TbRows) - 1)
+        For Each Itm In Array(RgHomeDir, RgBackupDir, RgCurrApp, RgFormListIndex)
+            .Add Itm, ws1.Range(Itm)
+        Next Itm
+    End With
     
-End Function
-
-Sub SaveStringToFile(ByVal PrintText As String, _
-        ByVal FPath As String, _
-        Optional ByVal ToOpen As Boolean = False)
-    
-    Dim FNum As Integer
-    
-    FNum = FreeFile
-    Open FPath For Output As FNum ' alternatively - For Append
-    Print #FNum, PrintText
-    Close #FNum
-    
-    If ToOpen Then
-        Shell """C:\Program Files\Notepad++\notepad++.exe"" """ & FPath & """", vbNormalFocus
-    End If
+    OutJson = JsonConverter.ConvertToJson(JsonValue:=OutD, Whitespace:=" ", json_CurrentIndentation:=4)
+    Call SaveStringToFile(OutJson, ThisWorkbook.Path & "\" & JsonFName)
+    MsgBox "Settings have been exported.", vbInformation, MsbTitle
 
 End Sub
 
-Function ReadFileToString(ByVal FPath As String) As String
+Sub ImportSettings()
     
-    Dim FNum As Integer
+    Dim i As Long
+    Dim InJson As String
+    Dim TbRows As Variant
+    Dim Itm As Variant
+    Dim Cell As Range
+    Dim Rg As Range
+    Dim InD As Object
     
-    FNum = FreeFile
-    Open FPath For Input As #FNum
-    ReadFileToString = input(LOF(FNum), FNum)
-    Close FNum
+    ' Clear table
+    For i = ws1.ListObjects(TblApps).ListRows.Count To 1 Step -1
+        ws1.ListObjects(TblApps).ListRows(i).Delete
+    Next i
     
-End Function
+    ' Parse json into InD
+    InJson = ReadFileToString(ThisWorkbook.Path & "\" & JsonFName)
+    Set InD = JsonConverter.ParseJson(InJson)
+    
+    ' Print json data
+    TbRows = Split(InD("TableRows"), vbLf, -1, vbTextCompare)
+    TbRows = WorksheetFunction.Transpose(TbRows)
+    Set Rg = SetRangeFromArrDimensions(ws1, ws1.Cells(2, 1), TbRows, True)
+    Rg = TbRows
+    
+    Application.DisplayAlerts = False
+    For Each Cell In Rg
+        ' Split text to columns
+        Cell.TextToColumns Semicolon:=True
+    Next Cell
+    Application.DisplayAlerts = True
+    
+    For Each Itm In Array(RgHomeDir, RgBackupDir, RgCurrApp, RgFormListIndex)
+        ws1.Range(Itm) = InD(Itm)
+    Next Itm
+    MsgBox "Settings have been imported.", vbInformation, MsbTitle
+    
+End Sub
 
+Sub QuitApp()
+    
+    If MsgBox("Are you sure you want to quit?", _
+            vbQuestion + vbOKCancel + vbDefaultButton2, _
+            MsbTitle) = vbOK Then
+        ThisWorkbook.Close 'SaveChanges:=False
+    End If
+    
+End Sub

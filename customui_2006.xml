@@ -16,7 +16,6 @@
                     
                     <splitButton
                         id="splbtnCodeExport"
-                        tag="gpCode"
                         size="large"
                         getEnabled="VBACodeTools_GetEnabled">
                         <button id="btnExportCode"
@@ -89,15 +88,17 @@
                         size="large"
                         screentip="Settings Actions"
                         supertip="Actions you can do with the settings: show, hide, export as JSON, import from JSON."
-                        itemSize="large">
+                        itemSize="normal">
                         <button id="itmShowHideSettings"
                             screentip="Show or Hide Settings"
                             getLabel="VBACodeTools_GetLabel"
+                            getImage="VBACodeTools_GetImage"
                             onAction="VBACodeTools_ClickButton"/>
                         <menuSeparator id="separator_01" />
                         <button id="itmExportSettings"
                             label="Export"
                             imageMso="ExportTextFile"
+                            tag="IsAddIn"
                             screentip="Export"
                             supertip="Export settings to JSON."
                             getEnabled="VBACodeTools_GetEnabled"
@@ -105,6 +106,7 @@
                         <button id="itmImportSettings"
                             label="Import"
                             imageMso="ImportTextFile"
+                            tag="IsAddIn"
                             screentip="Import"
                             supertip="Import settings from JSON."
                             getEnabled="VBACodeTools_GetEnabled"
@@ -114,7 +116,6 @@
                     <button id="btExit" 
                         label="Quit" 
                         imageMso="MasterViewClose" 
-                        tag="IsAddIn"
                         size="large" 
                         getEnabled="VBACodeTools_GetEnabled"
                         onAction="VBACodeTools_ClickButton"/>

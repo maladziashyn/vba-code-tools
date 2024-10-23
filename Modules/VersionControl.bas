@@ -34,7 +34,7 @@ Sub DeleteAndMake()
     
     Set fso = CreateObject("Scripting.FileSystemObject")
     
-    parentFolder = ThisWorkbook.path
+    parentFolder = ThisWorkbook.Path
     childA = parentFolder & dirNameCode
     childB = parentFolder & dirNameModules
         
@@ -171,8 +171,8 @@ Sub SaveTextToFile(ByRef dataToPrint As String, ByRef pathToExport As String)
     Dim textObject As Object
     Dim newFile  As String
     
-    If Dir(ThisWorkbook.path & newFile, vbDirectory) = vbNullString Then
-        MkDir ThisWorkbook.path & newFile
+    If Dir(ThisWorkbook.Path & newFile, vbDirectory) = vbNullString Then
+        MkDir ThisWorkbook.Path & newFile
     End If
     
     Set fileSystem = CreateObject("Scripting.FileSystemObject")
